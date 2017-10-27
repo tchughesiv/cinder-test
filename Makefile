@@ -48,6 +48,9 @@ test:
 	@echo ""
 	@echo "Check volume(s)..."
 	@for i in ${VOL_LIST}; do docker exec ${CONTAINERID} mountpoint $${i}; docker exec ${CONTAINERID} ls -ld $${i}; docker exec ${CONTAINERID} mount | grep -w $${i} | grep tmpfs; echo; done
+	@echo "Check cinder python client..."
+	docker exec ${CONTAINERID} cinder
+	@echo ""
 	@echo "Check cinder-test binary..."
 	docker exec ${CONTAINERID} cinder-test
 	@echo ""
