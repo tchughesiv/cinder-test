@@ -1,0 +1,15 @@
+hash: 4386a09165b9e794cc8c1913d4fdb7915fb0c60c32dea0e09d2e0b59eb210570
+updated: 2017-10-27T13:59:10.439133662-05:00
+imports:
+- name: github.com/gophercloud/gophercloud
+  version: d6667ee368f58dfeeb69ae9c11ba37f9fc7e0c58
+  subpackages:
+  - openstack
+  - openstack/blockstorage/noauth
+  - openstack/blockstorage/v2/volumes
+  - openstack/identity/v2/tenants
+  - openstack/identity/v2/tokens
+  - openstack/identity/v3/tokens
+  - openstack/utils
+  - pagination
+testImports: []
