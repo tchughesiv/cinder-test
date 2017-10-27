@@ -1,0 +1,7 @@
+package: github.com/tchughesiv/cinder-test
+import:
+- package: github.com/gophercloud/gophercloud
+  subpackages:
+  - openstack
+  - openstack/blockstorage/noauth
+  - openstack/blockstorage/v2/volumes
