@@ -14,6 +14,10 @@ RUN yum -y install epel-release && \
     pip install python-cinderclient && \
     yum clean all
 
+ENV CINDER_ENDPOINT=https://cinder.openstack.svc/v2 \
+    OS_USERNAME=test \
+    OS_TENANT_NAME=demo
+
 USER 10001
 WORKDIR ${APP_ROOT}
 ENTRYPOINT [ "uid_entrypoint" ]

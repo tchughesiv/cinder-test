@@ -12,14 +12,15 @@ import (
 	"strconv"
 
 	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/gophercloud/openstack/blockstorage/noauth"
 	"github.com/gophercloud/gophercloud/openstack/blockstorage/v2/volumes"
 )
 
+/*
 const (
 	oshost = "https://cinder.openstack.svc"
 )
+*/
 
 var (
 	tokenFile = flag.String("token", "/var/run/secrets/kubernetes.io/serviceaccount/token", "A pod's serviceaccount bearer token")
@@ -66,7 +67,10 @@ func main() {
 	}
 	bearer := map[string]string{"Authorization": "Bearer " + string(token)}
 
-	ao, err := openstack.AuthOptionsFromEnv()
+	ao := gophercloud.AuthOptions{
+		Username:   os.Getenv("OS_USERNAME"),
+		TenantName: os.Getenv("OS_TENANT_NAME"),
+	}
 
 	// Load CA cert
 	caCert, err := ioutil.ReadFile(*caFile)
@@ -85,8 +89,8 @@ func main() {
 	provider, err := noauth.NewClient(ao)
 	checkErr(err)
 	client, err := noauth.NewBlockStorageV2(provider, noauth.EndpointOpts{
-		CinderEndpoint: fmt.Sprintf("%s/v2", oshost),
-		// CinderEndpoint: os.Getenv("CINDER_ENDPOINT"),
+		// CinderEndpoint: fmt.Sprintf("%s/v2", oshost),
+		CinderEndpoint: os.Getenv("CINDER_ENDPOINT"),
 	})
 
 	client.HTTPClient.Transport = &http.Transport{
@@ -104,7 +108,7 @@ func main() {
 		}
 		csize, err = strconv.Atoi(os.Args[2])
 		checkErr(err)
-		vopts := volumes.CreateOpts{Size: csize, VolumeType: "iscsi"}
+		vopts := volumes.CreateOpts{Size: csize}
 		vol, err := Create(client, vopts, bearer).Extract()
 		checkErr(err)
 		log.Printf("%v - Created at %v", vol.ID, vol.CreatedAt)
